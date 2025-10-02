@@ -37,7 +37,8 @@ spec:
         stage('Setup Tools') {
             steps {
                 container('build') {
-                    sh 'apt-get update && apt-get install -y build-essential cmake cppcheck clang-format git coreutils'
+                    sh 'apt-get update && apt-get install -y build-essential cmake cppcheck clang-format git coreutils python3-pip'
+                    sh 'pip3 install pyparsing'
                 }
             }
         }
