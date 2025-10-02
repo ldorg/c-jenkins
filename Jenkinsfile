@@ -87,16 +87,16 @@ spec:
                     }
                     sh 'make clean'
                     sh 'make release'
-                    sh '''
+                    sh """
                         mkdir -p dist
                         cp build/src/demo-firmware dist/
                         cp README.md dist/
-                        tar -czf demo-firmware-${VERSION}.tar.gz -C dist .
-                    '''
-                    archiveArtifacts artifacts: "demo-firmware-${VERSION}.tar.gz", fingerprint: true
+                        tar -czf demo-firmware-${env.VERSION}.tar.gz -C dist .
+                    """
+                    archiveArtifacts artifacts: "demo-firmware-${env.VERSION}.tar.gz", fingerprint: true
 
                     script {
-                        def digest = sh(script: "sha256sum demo-firmware-${env.VERSION}.tar.gz | awk '{print $1}'", returnStdout: true).trim()
+                        def digest = sh(script: "sha256sum demo-firmware-${env.VERSION}.tar.gz | awk '{print \$1}'", returnStdout: true).trim()
                         
                         registerBuildArtifactMetadata(
                             name: env.JOB_NAME,
