@@ -45,6 +45,7 @@ spec:
         stage('Update Submodules') {
             steps {
                 container('build') {
+                    sh 'git config --global --add safe.directory ${WORKSPACE}'
                     sh 'git submodule update --init --recursive'
                 }
             }
