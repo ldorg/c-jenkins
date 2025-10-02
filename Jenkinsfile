@@ -1,7 +1,6 @@
 pipeline {
     agent {
         kubernetes {
-            label 'c-builder'
             yaml '''
 apiVersion: v1
 kind: Pod
@@ -29,7 +28,7 @@ spec:
                         $class: 'GitSCM',
                         branches: scm.branches,
                         userRemoteConfigs: scm.userRemoteConfigs,
-                        extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: true, recursiveSubmodules: true, reference: '', trackingSubmodules: false]]
+                        extensions: [[$class: 'SubmoduleOption', disableSubmodules: true]]
                     ])
                 }
             }
@@ -39,6 +38,14 @@ spec:
             steps {
                 container('build') {
                     sh 'apt-get update && apt-get install -y build-essential cmake cppcheck clang-format git coreutils'
+                }
+            }
+        }
+
+        stage('Update Submodules') {
+            steps {
+                container('build') {
+                    sh 'git submodule update --init --recursive'
                 }
             }
         }
@@ -97,7 +104,7 @@ spec:
 
                     script {
                         def digest = sh(script: "sha256sum demo-firmware-${env.VERSION}.tar.gz | awk '{print \$1}'", returnStdout: true).trim()
-                        
+
                         registerBuildArtifactMetadata(
                             name: env.JOB_NAME,
                             version: env.VERSION,
