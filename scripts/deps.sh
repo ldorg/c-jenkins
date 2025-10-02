@@ -21,8 +21,8 @@ sudo apt-get install -y \
     python3 \
     python3-pip
 
-# Install Unity dependencies 
-pip3 install --break-system-packages pyparsing junit-xml
+# Install Unity dependencies
+pip3 install --break-system-packages pyparsing junit.xml
 
 echo "Checking versions:"
 cmake --version | head -n1
