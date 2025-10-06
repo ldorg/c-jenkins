@@ -1,0 +1,22 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: deploy-manual
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    environment: firmware-prod
+    steps:
+      - name: Run deploy
+        kind: deploy
+        uses: https://github.com/cloudbees-io/cbci-run-job@v2
+        with:
+          url: ${{ vars.CBCI_URL }}
+          username: ${{ secrets.CBCI_USERNAME }}
+          token: ${{ secrets.CBCI_TOKEN }}
+          job-name: deploy
+      - name: Register deployed artifact
+        uses: cloudbees-io/register-deployed-artifact@v2
+        with:
+          artifact-id: ace989ec-a721-4aad-aac1-d0645c99dc26
