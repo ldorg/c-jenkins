@@ -1,6 +1,6 @@
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
-name: My workflow
+name: deploy
 on:
   workflow_call:
     inputs:
@@ -10,10 +10,13 @@ on:
       artifactVersion:
         type: string
         required: true
+      environment:
+        type: string
+        required: true
 
 jobs:
   deploy:
-    environment: firmware-prod
+    environment: ${{ inputs.environment }}
     steps:
       - name: Run deploy
         kind: deploy
