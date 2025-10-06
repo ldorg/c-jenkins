@@ -13,7 +13,7 @@ jobs:
         uses: https://github.com/cloudbees-io/cbci-run-job@v2
         with:
           url: ${{ vars.CBCI_URL }}
-          username: ${{ secrets.CBCI_USERNAME }}
+          username: ${{ vars.CBCI_USERNAME }}
           token: ${{ secrets.CBCI_TOKEN }}
           job-name: deploy
       - name: Register deployed artifact
