@@ -7,9 +7,6 @@ on:
       artifact-id:
         type: string
         required: true
-      artifactVersion:
-        type: string
-        required: true
       environment:
         type: string
         required: true
@@ -30,4 +27,3 @@ jobs:
         uses: cloudbees-io/register-deployed-artifact@v2
         with:
           artifact-id: ${{ inputs.artifact-id }}
-          artifactVersion: ${{ inputs.artifactVersion }}
