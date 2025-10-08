@@ -5,7 +5,29 @@ on:
   workflow_dispatch:
 
 jobs:
+  build:
+    outputs:
+        version: ${{ fromJSON(steps.build.outputs.jenkins_output).VERSION }}
+        artifact-id: ${{ steps.register.outputs.artifact-id }}
+    steps:
+      - name: Run deploy
+        kind: build
+        id: build
+        uses: https://github.com/cloudbees-io/cbci-run-job@v2
+        with:
+          url: ${{ vars.CBCI_URL }}
+          username: ${{ vars.CBCI_USERNAME }}
+          token: ${{ secrets.CBCI_TOKEN }}
+          job-name: build
+      - name: Register an artifact with the platform
+        id: register
+        uses: cloudbees-io/register-build-artifact@v2
+        with:
+          name: MyApp
+          url: docker.io/cloudbeesdemo/myapp:${{ fromJSON(steps.build.outputs.jenkins_output).VERSION }}
+          version: ${{ fromJSON(steps.build.outputs.jenkins_output).VERSION }}
   deploy:
+    needs: build
     environment: firmware-prod
     steps:
       - name: Run deploy
@@ -19,4 +41,4 @@ jobs:
       - name: Register deployed artifact
         uses: cloudbees-io/register-deployed-artifact@v2
         with:
-          artifact-id: ace989ec-a721-4aad-aac1-d0645c99dc26
+          artifact-id: ${{ needs.build.artifact-id }}
