@@ -1,0 +1,28 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: full
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    steps:
+      - name: Run Jenkins job
+        uses: https://github.com/cloudbees-io/jenkins-run-job@v2
+        with:
+          username: ${{ vars.CBCI_USERNAME }}
+          token: ${{ secrets.CBCI_TOKEN }}
+          url: ${{ vars.LD_CI_URL }}
+          job-name: c-jenkins
+          test-type: Junit
+          test-result-location: test-results.xml
+
+      - id: expose-output
+        name: Expose Jenkins job output
+        uses: docker://exozet/jq:1.6-r0
+        run: |
+          echo "BUILD_NUMBER: ${{ fromJSON(steps.my-output-job.outputs.jenkins_output).BUILD_NUMBER }}"
+          echo "MY_VAR: ${{ fromJSON(steps.my-output-job.outputs.jenkins_output).MY_VAR }}"
