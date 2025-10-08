@@ -75,6 +75,9 @@ spec:
                             // TODO: Add Black Duck SCA scan
                             // This will require credentials to be configured in Jenkins
                             echo 'TODO: Run Black Duck SCA scan'
+                            script {
+                                env.MY_VAR = "Hello from CI"
+                            }
                         }
                     }
                 }
