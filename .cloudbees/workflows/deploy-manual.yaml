@@ -41,4 +41,4 @@ jobs:
       - name: Register deployed artifact
         uses: cloudbees-io/register-deployed-artifact@v2
         with:
-          artifact-id: ${{ needs.build.artifact-id }}
+          artifact-id: ${{ needs.build.outputs.artifact-id }}
