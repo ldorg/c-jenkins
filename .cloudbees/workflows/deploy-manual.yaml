@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     outputs:
-        version: ${{ fromJSON(steps.build.outputs.jenkins_output).VERSION }}
+        version: ${{ fromJSON(steps.build.outputs.cbci_output).VERSION }}
         artifact-id: ${{ steps.register.outputs.artifact-id }}
     steps:
       - name: Run deploy
@@ -24,8 +24,8 @@ jobs:
         uses: cloudbees-io/register-build-artifact@v2
         with:
           name: MyApp
-          url: docker.io/cloudbeesdemo/myapp:${{ fromJSON(steps.build.outputs.jenkins_output).VERSION }}
-          version: ${{ fromJSON(steps.build.outputs.jenkins_output).VERSION }}
+          url: docker.io/cloudbeesdemo/myapp:${{ fromJSON(steps.build.outputs.cbci_output).VERSION }}
+          version: ${{ fromJSON(steps.build.outputs.cbci_output).VERSION }}
   deploy:
     needs: build
     environment: firmware-prod
